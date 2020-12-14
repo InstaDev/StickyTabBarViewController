@@ -146,16 +146,21 @@ class ExpandableViewController: UIViewController {
             self.isEnlarged != isEnlarging else {
                 return
         }
+        let frame = tabController.tabBar.frame
         
         runningAnimation = UIViewPropertyAnimator(
             duration: duration,
             dampingRatio: 1) {
                 if isEnlarging {
-                    self.heightConstraint.constant = self.deviceHeight - tabController.tabBar.frame.height
+                    self.heightConstraint.constant = self.deviceHeight
                     self.minimisedView.alpha = 0.0
+                    tabController.tabBar.alpha = 0.0
+                    self.childVC.view.layer.cornerRadius = 0
                 } else {
                     self.heightConstraint.constant = self.collapsedHeight
                     self.minimisedView.alpha = 1.0
+                    tabController.tabBar.alpha = 1.0
+                    self.childVC.view.layer.cornerRadius = 25
                 }
                 self.view.setNeedsLayout()
                 tabController.view.setNeedsLayout()

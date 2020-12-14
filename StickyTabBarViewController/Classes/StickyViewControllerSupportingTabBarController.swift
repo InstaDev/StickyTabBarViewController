@@ -38,7 +38,7 @@ open class StickyViewControllerSupportingTabBarController: UITabBarController, S
         guard collapsableVCFlow == nil else {
             return
         }
-        childViewController.loadViewIfNeeded()
+        childViewController.loadView()
         childViewController.container = self
         self.childViewController = childViewController
         collapsableVCFlow = ExpandableViewController(withChildVC: childViewController,
@@ -46,13 +46,13 @@ open class StickyViewControllerSupportingTabBarController: UITabBarController, S
                                                      animationDuration: animationDuration)
         
         collapsableVCFlow!.tabController = self
-        view.addSubview(collapsableVCFlow!.view)
+        view.insertSubview(collapsableVCFlow!.view, belowSubview: tabBar)
         addChild(collapsableVCFlow!)
         collapsableVCFlow!.view.translatesAutoresizingMaskIntoConstraints = false
         collapsableVCFlow!.view.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         collapsableVCFlow!.view.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
 
-        collapsableVCFlow!.view.bottomAnchor.constraint(equalTo: tabBar.topAnchor).isActive = true
+        collapsableVCFlow!.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         let heightConstraint = collapsableVCFlow!.view.heightAnchor.constraint(equalToConstant: collapsedHeight)
         heightConstraint.isActive = true
         collapsableVCFlow!.heightConstraint = heightConstraint
@@ -77,6 +77,7 @@ open class StickyViewControllerSupportingTabBarController: UITabBarController, S
                            animations: {
                             collapsableVCFlow.heightConstraint.constant = 0.0
                             collapsableVCFlow.view.layoutIfNeeded()
+                            self.tabBar.alpha = 1.0
                             self.view.layoutIfNeeded()
             }) { (completed) in
                 if completed {
